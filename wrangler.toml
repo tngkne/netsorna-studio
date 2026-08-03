@@ -1,0 +1,78 @@
+# ==========================================
+# WRANGLER CONFIGURATION — Netsorna Studio
+# ==========================================
+
+name = "netsorna-studio"
+main = "workers-site/index.js"
+compatibility_date = "2026-08-03"
+
+# ------------------------------------------
+# Environment: Production
+# ------------------------------------------
+[env.production]
+account_id = "YOUR_ACCOUNT_ID"
+
+# Static asset hosting via Workers Sites
+[env.production.site]
+bucket = "./store"
+
+# KV Namespaces (for cart, sessions, etc.)
+[[env.production.kv_namespaces]]
+binding = "CART_KV"
+id = "YOUR_CART_KV_ID"
+preview_id = "YOUR_CART_KV_PREVIEW_ID"
+
+[[env.production.kv_namespaces]]
+binding = "SESSIONS_KV"
+id = "YOUR_SESSIONS_KV_ID"
+preview_id = "YOUR_SESSIONS_KV_PREVIEW_ID"
+
+# D1 Database (for orders, products, etc.)
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "netsorna-db"
+database_id = "YOUR_D1_DATABASE_ID"
+
+# ------------------------------------------
+# Environment: Staging
+# ------------------------------------------
+[env.staging]
+account_id = "YOUR_ACCOUNT_ID"
+
+[env.staging.site]
+bucket = "./store"
+
+[[env.staging.kv_namespaces]]
+binding = "CART_KV"
+id = "YOUR_STAGING_CART_KV_ID"
+
+[[env.staging.kv_namespaces]]
+binding = "SESSIONS_KV"
+id = "YOUR_STAGING_SESSIONS_KV_ID"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "netsorna-db-staging"
+database_id = "YOUR_STAGING_D1_DATABASE_ID"
+
+# ------------------------------------------
+# Environment: Development (local)
+# ------------------------------------------
+[env.development]
+account_id = "YOUR_ACCOUNT_ID"
+
+[env.development.site]
+bucket = "./store"
+
+# ------------------------------------------
+# Build Settings
+# ------------------------------------------
+[build]
+command = ""
+
+# ------------------------------------------
+# Routes (optional — for custom domain)
+# ------------------------------------------
+# routes = [
+#   { pattern = "netsorna.com/*", zone_name = "netsorna.com" }
+# ]
