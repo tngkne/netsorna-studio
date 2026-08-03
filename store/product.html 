@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heritage Tote — Netsorna</title>
+  <meta name="description" content="The Heritage Tote — hand-stitched full-grain leather tote bag. Made to order.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/base.css">
+  <style>
+    /* ==========================================
+       PRODUCT DETAIL PAGE
+       ========================================== */
+
+    .product-page {
+      padding-top: calc(64px + var(--space-8));
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+      padding-left: var(--page-padding-x);
+      padding-right: var(--page-padding-x);
+    }
+
+    .product-detail {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-12);
+      padding-bottom: var(--section-gap);
+    }
+
+    @media (min-width: 1024px) {
+      .product-detail {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-16);
+      }
+    }
+
+    /* Gallery */
+    .gallery {
+      position: sticky;
+      top: calc(64px + var(--space-6));
+      align-self: start;
+    }
+
+    .gallery__main {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      background: var(--hero-fallback);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: var(--space-4);
+    }
+
+    .gallery__main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery__thumbs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-3);
+    }
+
+    .gallery__thumb {
+      aspect-ratio: 1;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color var(--duration-fast) var(--ease-smooth);
+    }
+
+    .gallery__thumb:hover,
+    .gallery__thumb.is-active {
+      border-color: var(--text-primary);
+    }
+
+    .gallery__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Product Info */
+    .product-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .product-info__breadcrumbs {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    .product-info__breadcrumbs a {
+      transition: color var(--duration-fast) var(--ease-smooth);
+    }
+
+    .product-info__breadcrumbs a:hover {
+      color: var(--text-primary);
+    }
+
+    .product-info__category {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: var(--tracking-widest);
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .product-info__name {
+      font-family: var(--font-secondary);
+      font-size: var(--text-3xl);
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      line-height: var(--leading-tight);
+    }
+
+    .product-info__price-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-3);
+    }
+
+    .product-info__price {
+      font-family: var(--font-mono);
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
+      color: var(--price-color);
+    }
+
+    .product-info__price--sale {
+      color: var(--price-sale);
+    }
+
+    .product-info__price--original {
+      font-size: var(--text-lg);
+      color: var(--price-original);
+      text-decoration: line-through;
+      font-weight: var(--font-regular);
+    }
+
+    .product-info__stock {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+    }
+
+    .product-info__stock-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-full);
+      background: var(--stock-available);
+    }
+
+    .product-info__desc {
+      font-size: var(--text-base);
+      color: var(--text-muted);
+      line-height: var(--leading-relaxed);
+    }
+
+    /* Variants */
+    .variant-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .variant-group__label {
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+      color: var(--text-primary);
+    }
+
+    .variant-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .variant-option {
+      min-width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 var(--space-4);
+      border: var(--border-default) solid var(--border-default);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-smooth);
+      background: var(--bg-surface);
+    }
+
+    .variant-option:hover {
+      border-color: var(--text-primary);
+    }
+
+    .variant-option.is-active {
+      border-color: var(--text-primary);
+      background: var(--text-primary);
+      color: var(--text-inverse);
+    }
+
+    .variant-option--color {
+      width: 36px;
+      height: 36px;
+      min-width: auto;
+      padding: 0;
+      border-radius: var(--radius-full);
+      border-width: 2px;
+    }
+
+    .variant-option--color.is-active {
+      box-shadow: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--text-primary);
+      background: inherit;
+    }
+
+    /* Quantity & Add to Cart */
+    .product-actions {
+      display: flex;
+      gap: var(--space-4);
+      padding-top: var(--space-4);
+      border-top: var(--border-default) solid var(--border-light);
+    }
+
+    .quantity {
+      display: flex;
+      align-items: center;
+      border: var(--border-default) solid var(--border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .quantity__btn {
+      width: 44px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-lg);
+      color: var(--text-muted);
+      transition: background var(--duration-fast) var(--ease-smooth);
+    }
+
+    .quantity__btn:hover {
+      background: var(--bg-surface-alt);
+    }
+
+    .quantity__input {
+      width: 48px;
+      height: 48px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-base);
+      font-weight: var(--font-semibold);
+      border: none;
+      border-left: var(--border-default) solid var(--border-default);
+      border-right: var(--border-default) solid var(--border-default);
+      -moz-appearance: textfield;
+    }
+
+    .quantity__input::-webkit-inner-spin-button,
+    .quantity__input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .product-actions .btn--solid {
+      flex: 1;
+    }
+
+    /* Product Meta */
+    .product-meta {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding-top: var(--space-4);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    .product-meta__item {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .product-meta__label {
+      font-weight: var(--font-medium);
+      color: var(--text-primary);
+    }
+
+    /* Tabs */
+    .product-tabs {
+      padding: var(--section-gap) 0;
+      border-top: var(--border-default) solid var(--border-light);
+    }
+
+    .tablist {
+      display: flex;
+      gap: var(--space-1);
+      border-bottom: var(--border-default) solid var(--border-light);
+      margin-bottom: var(--space-8);
+    }
+
+    .tab {
+      padding: var(--space-3) var(--space-5);
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all var(--duration-fast) var(--ease-smooth);
+      cursor: pointer;
+      background: none;
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+    }
+
+    .tab.is-active {
+      color: var(--text-primary);
+      border-bottom-color: var(--text-primary);
+    }
+
+    .tabpanel {
+      display: none;
+    }
+
+    .tabpanel.is-active {
+      display: block;
+    }
+
+    .tabpanel h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--font-semibold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+    }
+
+    .tabpanel p {
+      font-size: var(--text-base);
+      color: var(--text-muted);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-4);
+    }
+
+    .tabpanel ul {
+      list-style: disc;
+      padding-left: var(--space-6);
+      color: var(--text-muted);
+      line-height: var(--leading-relaxed);
+    }
+
+    .tabpanel li {
+      margin-bottom: var(--space-2);
+    }
+
+    /* Related Products */
+    .related {
+      padding: var(--section-gap) 0;
+      border-top: var(--border-default) solid var(--border-light);
+    }
+
+    .related__title {
+      font-family: var(--font-secondary);
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-8);
+    }
+
+    .related__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--grid-gutter);
+    }
+
+    @media (min-width: 640px) {
+      .related__grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__brand">Netsorna</a>
+      <div class="navbar__nav hidden-mobile">
+        <a href="shop.html" class="navbar__link is-active">Shop</a>
+        <a href="custom-order.html" class="navbar__link">Custom</a>
+        <a href="about.html" class="navbar__link">About</a>
+        <a href="blog.html" class="navbar__link">Journal</a>
+        <a href="contact.html" class="navbar__link">Contact</a>
+      </div>
+      <div class="navbar__actions">
+        <button class="btn btn--subtle btn--sm" aria-label="Search">
+          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <a href="checkout.html" class="btn btn--subtle btn--sm" aria-label="Cart">
+          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </a>
+        <button class="btn btn--subtle btn--sm hidden-tablet-up" aria-label="Menu">
+          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="M4 18h16"/><path d="M4 6h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="product-page">
+    <div class="product-detail">
+      <!-- Gallery -->
+      <div class="gallery">
+        <div class="gallery__main">
+          <img id="main-image" src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&h=1000&fit=crop" alt="Heritage Tote">
+        </div>
+        <div class="gallery__thumbs">
+          <button class="gallery__thumb is-active" onclick="document.getElementById('main-image').src='https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&h=1000&fit=crop'">
+            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=200&fit=crop" alt="Front view">
+          </button>
+          <button class="gallery__thumb" onclick="document.getElementById('main-image').src='https://images.unsplash.com/photo-1590874103328-eac38a2416f7?w=800&h=1000&fit=crop'">
+            <img src="https://images.unsplash.com/photo-1590874103328-eac38a2416f7?w=200&h=200&fit=crop" alt="Side view">
+          </button>
+          <button class="gallery__thumb" onclick="document.getElementById('main-image').src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=1000&fit=crop'">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=200&h=200&fit=crop" alt="Detail view">
+          </button>
+          <button class="gallery__thumb" onclick="document.getElementById('main-image').src='https://images.unsplash.com/photo-1606503825008-909a6184f325?w=800&h=1000&fit=crop'">
+            <img src="https://images.unsplash.com/photo-1606503825008-909a6184f325?w=200&h=200&fit=crop" alt="Interior view">
+          </button>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="product-info">
+        <nav class="product-info__breadcrumbs" aria-label="Breadcrumb">
+          <a href="shop.html">Shop</a> / <a href="shop.html">Bags</a> / <span>Heritage Tote</span>
+        </nav>
+
+        <p class="product-info__category">Bags</p>
+        <h1 class="product-info__name">Heritage Tote</h1>
+
+        <div class="product-info__price-row">
+          <span class="product-info__price">$285</span>
+        </div>
+
+        <div class="product-info__stock">
+          <span class="product-info__stock-dot"></span>
+          <span>In Stock — Ships within 2 business days</span>
+        </div>
+
+        <p class="product-info__desc">
+          A timeless everyday companion cut from 4oz full-grain vegetable-tanned leather. 
+          Hand-saddle-stitched with waxed linen thread. Features a reinforced base, 
+          interior pocket, and solid brass hardware that ages beautifully alongside the leather.
+        </p>
+
+        <!-- Color -->
+        <div class="variant-group">
+          <p class="variant-group__label">Color — <span id="color-label">Cognac</span></p>
+          <div class="variant-options">
+            <button class="variant-option variant-option--color is-active" style="background:#8B4513;" data-color="Cognac" onclick="selectVariant(this, 'color-label')"></button>
+            <button class="variant-option variant-option--color" style="background:#2F2F2F;" data-color="Black" onclick="selectVariant(this, 'color-label')"></button>
+            <button class="variant-option variant-option--color" style="background:#C4A77D;" data-color="Natural" onclick="selectVariant(this, 'color-label')"></button>
+            <button class="variant-option variant-option--color" style="background:#5C3A21;" data-color="Chocolate" onclick="selectVariant(this, 'color-label')"></button>
+          </div>
+        </div>
+
+        <!-- Size -->
+        <div class="variant-group">
+          <p class="variant-group__label">Size — <span id="size-label">Medium</span></p>
+          <div class="variant-options">
+            <button class="variant-option" onclick="selectVariant(this, 'size-label')">Small</button>
+            <button class="variant-option is-active" onclick="selectVariant(this, 'size-label')">Medium</button>
+            <button class="variant-option" onclick="selectVariant(this, 'size-label')">Large</button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="product-actions">
+          <div class="quantity">
+            <button class="quantity__btn" onclick="adjustQty(-1)">-</button>
+            <input type="number" class="quantity__input" id="qty" value="1" min="1" max="10" readonly>
+            <button class="quantity__btn" onclick="adjustQty(1)">+</button>
+          </div>
+          <button class="btn btn--solid btn--lg" onclick="Components.Toast.success('Added to cart', 'Heritage Tote')">
+            Add to Cart — $285
+          </button>
+        </div>
+
+        <div class="product-meta">
+          <div class="product-meta__item">
+            <span class="product-meta__label">Material:</span>
+            <span>Full-grain vegetable-tanned leather</span>
+          </div>
+          <div class="product-meta__item">
+            <span class="product-meta__label">Dimensions:</span>
+            <span>14" W x 12" H x 5" D (Medium)</span>
+          </div>
+          <div class="product-meta__item">
+            <span class="product-meta__label">Hardware:</span>
+            <span>Solid brass</span>
+          </div>
+          <div class="product-meta__item">
+            <span class="product-meta__label">Made in:</span>
+            <span>Small batch, USA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="product-tabs" data-tabs="product">
+      <div class="tablist" role="tablist">
+        <button class="tab is-active" role="tab" aria-selected="true">Description</button>
+        <button class="tab" role="tab" aria-selected="false">Details & Care</button>
+        <button class="tab" role="tab" aria-selected="false">Shipping</button>
+      </div>
+      <div class="tabpanel is-active" role="tabpanel">
+        <h3>About the Heritage Tote</h3>
+        <p>The Heritage Tote was designed as an everyday carry that improves with age. The leather is sourced from a family-run tannery in Tuscany, then cut and stitched entirely by hand in our workshop.</p>
+        <p>Over time, the leather develops a rich patina unique to how you use it — sun exposure, the oils from your hands, and daily wear all contribute to a finish that no factory process can replicate.</p>
+        <ul>
+          <li>Hand-cut from a single hide for grain consistency</li>
+          <li>Saddle-stitched with 0.8mm waxed linen thread</li>
+          <li>Reinforced base panel for structure</li>
+          <li>Interior slip pocket for keys and phone</li>
+          <li>Brass rivets at stress points</li>
+        </ul>
+      </div>
+      <div class="tabpanel" role="tabpanel" hidden>
+        <h3>Care Instructions</h3>
+        <p>Leather is a living material. With minimal care, your tote will last decades.</p>
+        <ul>
+          <li>Apply leather conditioner every 6–12 months</li>
+          <li>Keep dry — if wet, air dry away from heat sources</li>
+          <li>Store stuffed to maintain shape</li>
+          <li>Avoid prolonged direct sunlight to prevent uneven darkening</li>
+        </ul>
+        <h3>What's Included</h3>
+        <p>Each tote ships with a cotton dust bag and a 2oz tin of our leather balm.</p>
+      </div>
+      <div class="tabpanel" role="tabpanel" hidden>
+        <h3>Shipping & Returns</h3>
+        <p><strong>Free shipping</strong> on all orders over $150 within the continental US. International shipping calculated at checkout.</p>
+        <p>In-stock items ship within 2 business days. Made-to-order pieces ship within 2–3 weeks.</p>
+        <p><strong>Returns:</strong> Unused items in original condition may be returned within 30 days. Custom orders are final sale.</p>
+      </div>
+    </div>
+
+    <!-- Related -->
+    <section class="related">
+      <h2 class="related__title">You May Also Like</h2>
+      <div class="related__grid">
+        <article class="product-card card--clickable" onclick="location.href='product.html'">
+          <div class="product-card__media">
+            <img src="https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&h=800&fit=crop" alt="Field Messenger" loading="lazy">
+          </div>
+          <div class="product-card__content">
+            <p class="product-card__category">Bags</p>
+            <h3 class="product-card__name">Field Messenger</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$340</span>
+            </div>
+          </div>
+        </article>
+        <article class="product-card card--clickable" onclick="location.href='product.html'">
+          <div class="product-card__media">
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=800&fit=crop" alt="Weekender" loading="lazy">
+          </div>
+          <div class="product-card__content">
+            <p class="product-card__category">Travel</p>
+            <h3 class="product-card__name">Weekender Duffel</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price product-card__price--sale">$420</span>
+              <span class="product-card__price--original">$520</span>
+            </div>
+          </div>
+        </article>
+        <article class="product-card card--clickable" onclick="location.href='product.html'">
+          <div class="product-card__media">
+            <img src="https://images.unsplash.com/photo-1606503825008-909a6184f325?w=600&h=800&fit=crop" alt="Notebook Cover" loading="lazy">
+          </div>
+          <div class="product-card__content">
+            <p class="product-card__category">Accessories</p>
+            <h3 class="product-card__name">Field Notebook Cover</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$68</span>
+            </div>
+          </div>
+        </article>
+        <article class="product-card card--clickable" onclick="location.href='product.html'">
+          <div class="product-card__media">
+            <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?w=600&h=800&fit=crop" alt="Slim Bifold" loading="lazy">
+          </div>
+          <div class="product-card__content">
+            <p class="product-card__category">Wallets</p>
+            <h3 class="product-card__name">Slim Bifold</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">$95</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    function selectVariant(btn, labelId) {
+      const group = btn.closest('.variant-options');
+      group.querySelectorAll('.variant-option').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const label = document.getElementById(labelId);
+      if (btn.dataset.color) label.textContent = btn.dataset.color;
+      else label.textContent = btn.textContent;
+    }
+
+    function adjustQty(delta) {
+      const input = document.getElementById('qty');
+      const val = parseInt(input.value) + delta;
+      if (val >= 1 && val <= 10) input.value = val;
+    }
+
+    // Tab switching
+    document.querySelectorAll('.tablist .tab').forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tablist .tab').forEach(t => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+
+        document.querySelectorAll('.tabpanel').forEach((panel, j) => {
+          panel.classList.toggle('is-active', j === i);
+          panel.hidden = j !== i;
+        });
+      });
+    });
+  </script>
+</body>
+</html>
